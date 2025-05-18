@@ -4,7 +4,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "mongoose": "^8.14.3"
+    "md5": "^2.3.0",
+    "mongoose": "^8.14.3",
+    "nodemailer": "^7.0.3"
   },
   "name": "task_ojt",
   "version": "1.0.0",

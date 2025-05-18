@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const taskSchema = new mongoose.Schema(
     {
         title: String,
-        status: String,
+        status: String, // "initial", "pending", "doing", "finish", "notFinish"
         content: String,
         timeStart: Date,
         timeFinish: Date,
