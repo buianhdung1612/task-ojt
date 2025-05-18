@@ -1,24 +1,23 @@
-const express = require('express')
-const bodyParser = require('body-parser')
+const express = require('express');
+const bodyParser = require('body-parser');
 const cors = require('cors');
-const app = express()
-const port = 3000
-require('dotenv').config()
+const app = express();
+require('dotenv').config();
 
-const database = require("./config/database");
+const database = require('./config/database');
 database.connect();
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+// Middleware
+app.use(cors()); // Cho phép tất cả origin
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-// parse application/json
-app.use(bodyParser.json())
-
-app.use(cors())
-
-const routeClient = require("./routes/client/index.route");
+// Routes
+const routeClient = require('./routes/client/index.route');
 routeClient(app);
 
+// Lưu ý quan trọng ở đây!
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`App listening on port ${port}`)
-})
+  console.log(`App listening on port ${port}`);
+});
