@@ -4,8 +4,8 @@ const User = require("../../models/user.model");
 module.exports.index = async (req, res) => {
     const find = {
         $or: [
-            { createdBy: req.user.id },
-            { listUser: req.user.id }
+            { createdBy: req.user._id.toString() },
+            { listUser: req.user._id.toString() }
         ],
         deleted: false
     };
@@ -88,7 +88,7 @@ module.exports.changeStatusPatch = async (req, res) => {
 
 module.exports.createPost = async (req, res) => {
     const data = req.body;
-    data.createdBy = req.user.id;
+    data.createdBy = req.user._id;
 
     for (const userId of data.listUser) {
         const existUser = await User.findOne({
