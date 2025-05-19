@@ -114,9 +114,14 @@ module.exports.delete = async (req, res) => {
         deleted: true
     });
 
+    const tasks = await Task.find({
+        deleted: false
+    })
+
     res.json({
         code: "success",
-        message: "Xóa thành công!"
+        message: "Xóa thành công!",
+        tasks: tasks
     })
 }
 
