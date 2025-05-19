@@ -101,9 +101,14 @@ module.exports.editPatch = async (req, res) => {
         _id: id
     }, data);
 
+    const tasks = await Task.find({
+        deleted: false
+    })
+
     res.json({
         code: "success",
-        message: "Cập nhật công việc thành công!"
+        message: "Cập nhật công việc thành công!",
+        tasks: tasks
     })
 }
 
