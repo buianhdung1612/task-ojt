@@ -1,7 +1,7 @@
 const User = require("../../models/user.model");
 
 module.exports.requireAuth = async (req, res, next) => {
-    if(!req.headers.authorization){
+    if (!req.headers.authorization) {
         res.json({
             code: "error",
             message: "Vui lòng gửi kèm theo token"
@@ -10,19 +10,22 @@ module.exports.requireAuth = async (req, res, next) => {
         return;
     }
 
-    const token = req.header.authorization.split("")[1];
+    const token = req.headers.authorization.split(" ")[1];
 
     const existUser = await User.findOne({
         token: token,
         deleted: false
     });
 
-    if(!existUser){
+    if (!existUser) {
         res.json({
-            code: "error", 
+            code: "error",
             message: "Token không hợp lệ"
         });
-
-        next();
     }
+
+    req.user = existUser;
+
+    next();
+
 }
