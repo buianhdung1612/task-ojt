@@ -17,18 +17,18 @@ module.exports.index = async (req, res) => {
     // End Sort
 
     // Phân trang
-    let page = 1;
-    let limitItems = 4;
+    // let page = 1;
+    // let limitItems = 4;
 
-    if(req.query.page){
-        page = parseInt(req.query.page);
-    }
+    // if(req.query.page){
+    //     page = parseInt(req.query.page);
+    // }
 
-    if(req.query.limit){
-        limitItems = parseInt(req.query.limit);
-    }
+    // if(req.query.limit){
+    //     limitItems = parseInt(req.query.limit);
+    // }
 
-    const skip = (page - 1) * limitItems;
+    // const skip = (page - 1) * limitItems;
     // Hết Phân trang
 
     // Tìm kiếm
@@ -38,7 +38,8 @@ module.exports.index = async (req, res) => {
     }
     // Hết Tìm kiếm
 
-    const tasks = await Task.find(find).sort(sort).limit(limitItems).skip(skip);
+    // const tasks = await Task.find(find).sort(sort).limit(limitItems).skip(skip);
+    const tasks = await Task.find(find).sort(sort);
 
     res.json(tasks);
 }
