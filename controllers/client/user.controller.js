@@ -210,3 +210,15 @@ module.exports.profile = async (req, res) => {
         data: user
     })
 }
+
+module.exports.list = async (req, res) => {
+    const listUser = await User.find({
+        deleted: false
+    }).select("id fullname email");
+
+    res.json({
+        code: "success",
+        message: "Thành công!",
+        data: listUser
+    })
+}

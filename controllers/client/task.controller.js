@@ -1,17 +1,22 @@
-const Task = require("../../models/task.model")
+const Task = require("../../models/task.model");
+const User = require("../../models/user.model");
 
 module.exports.index = async (req, res) => {
     const find = {
+        $or: [
+            { createdBy: req.user.id },
+            { listUser: req.user.id }
+        ],
         deleted: false
     };
 
-    if(req.query.status){
+    if (req.query.status) {
         find.status = req.query.status
     }
 
     // Sort
     const sort = {}
-    if(req.query.sortKey && req.query.sortValue){
+    if (req.query.sortKey && req.query.sortValue) {
         sort[req.query.sortKey] = req.query.sortValue;
     }
     // End Sort
@@ -32,7 +37,7 @@ module.exports.index = async (req, res) => {
     // Hết Phân trang
 
     // Tìm kiếm
-    if(req.query.keyword){
+    if (req.query.keyword) {
         const regex = new RegExp(req.query.keyword, "i");
         find.title = regex;
     }
@@ -83,6 +88,39 @@ module.exports.changeStatusPatch = async (req, res) => {
 
 module.exports.createPost = async (req, res) => {
     const data = req.body;
+    data.createdBy = req.user.id;
+
+    for (const userId of data.listUser) {
+        const existUser = await User.findOne({
+            _id: userId,
+            deleted: false
+        });
+
+        if (!existUser) {
+            res.json({
+                code: "error",
+                message: "Người dùng không hợp lệ"
+            });
+
+            return;
+        }
+    }
+
+    const taskParentId = req.body.taskParentId;
+    const existTaskParent = Task.findOne({
+        _id: taskParentId,
+        deleted: false
+    });
+
+    if (!existTaskParent) {
+        res.json({
+            code: "error",
+            message: "Id công việc cha không hợp lệ!",
+            data: task
+        });
+        return;
+    }
+
     const task = new Task(data);
     await task.save();
 
