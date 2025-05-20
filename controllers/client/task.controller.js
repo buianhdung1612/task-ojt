@@ -2,16 +2,20 @@ const Task = require("../../models/task.model");
 const User = require("../../models/user.model");
 
 module.exports.index = async (req, res) => {
+    const userCondition = [
+        { createdBy: req.user._id.toString() },
+        { listUser: req.user._id.toString() }
+    ];
+
     const find = {
-        $or: [
-            { createdBy: req.user._id.toString() },
-            { listUser: req.user._id.toString() }
-        ],
-        deleted: false
+        $and: [
+            { $or: userCondition },
+            { deleted: false }
+        ]
     };
 
     if (req.query.status) {
-        find.status = req.query.status
+        find.$and.push({ status: req.query.status });
     }
 
     // Sort
@@ -22,17 +26,19 @@ module.exports.index = async (req, res) => {
     // End Sort
 
     // Sort theo ngày hôm nay
-    if(req.query.today == "true"){
+    if (req.query.today == "true") {
         const start = new Date();
         start.setHours(0, 0, 0, 0);
-        
+
         const end = new Date();
         end.setHours(23, 59, 59, 999);
 
-        find.$or = [
-            { timeStart : { $gte: start, $lte: end } },
-            { timeFinish : { $gte: start, $lte: end } },
-        ]
+        find.$and.push({
+            $or: [
+                { timeStart: { $gte: start, $lte: end } },
+                { timeFinish: { $gte: start, $lte: end } }
+            ]
+        });
     }
 
     // Phân trang
@@ -53,7 +59,7 @@ module.exports.index = async (req, res) => {
     // Tìm kiếm
     if (req.query.keyword) {
         const regex = new RegExp(req.query.keyword, "i");
-        find.title = regex;
+        find.$and.push({ title: regex });
     }
     // Hết Tìm kiếm
 
@@ -153,14 +159,9 @@ module.exports.editPatch = async (req, res) => {
         _id: id
     }, data);
 
-    const tasks = await Task.find({
-        deleted: false
-    })
-
     res.json({
         code: "success",
-        message: "Cập nhật công việc thành công!",
-        tasks: tasks
+        message: "Cập nhật công việc thành công!"
     })
 }
 
@@ -171,14 +172,9 @@ module.exports.delete = async (req, res) => {
         deleted: true
     });
 
-    const tasks = await Task.find({
-        deleted: false
-    })
-
     res.json({
         code: "success",
-        message: "Xóa thành công!",
-        tasks: tasks
+        message: "Xóa thành công!"
     })
 }
 
