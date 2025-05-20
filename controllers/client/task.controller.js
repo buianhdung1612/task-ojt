@@ -21,6 +21,20 @@ module.exports.index = async (req, res) => {
     }
     // End Sort
 
+    // Sort theo ngày hôm nay
+    if(req.query.today == "true"){
+        const start = new Date();
+        start.setHours(0, 0, 0, 0);
+        
+        const end = new Date();
+        end.setHours(23, 59, 59, 999);
+
+        find.$or = [
+            { timeStart : { $gte: start, $lte: end } },
+            { timeFinish : { $gte: start, $lte: end } },
+        ]
+    }
+
     // Phân trang
     // let page = 1;
     // let limitItems = 4;
