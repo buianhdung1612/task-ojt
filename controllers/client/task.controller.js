@@ -155,6 +155,20 @@ module.exports.editPatch = async (req, res) => {
     const id = req.params.id;
     const data = req.body;
 
+    const task = await Task.findOne({
+        _id: id,
+        deleted: false
+    });
+
+    if(!task){
+        res.json({
+            code: "error", 
+            message: "Công việc này đã được xóa"
+        });
+
+        return;
+    }
+
     await Task.updateOne({
         _id: id
     }, data);

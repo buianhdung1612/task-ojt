@@ -128,7 +128,7 @@ module.exports.otpPassword = async (req, res) => {
         otp: otp
     });
 
-    if(!existRecord){
+    if (!existRecord) {
         res.json({
             code: "error",
             message: "Mã OTP không hợp lệ"
@@ -157,7 +157,7 @@ module.exports.resetPassword = async (req, res) => {
         deleted: false
     });
 
-    if(!existUser){
+    if (!existUser) {
         res.json({
             code: "success",
             message: "Không có tài khoản bạn đang muốn đổi mật khẩu!"
@@ -182,7 +182,7 @@ module.exports.resetPassword = async (req, res) => {
 module.exports.profile = async (req, res) => {
     const token = req.user.token;
 
-    if(!token){
+    if (!token) {
         res.json({
             code: "error",
             message: "Vùi lòng gửi kèm theo token"
@@ -196,7 +196,7 @@ module.exports.profile = async (req, res) => {
         deleted: false
     }).select("id fullname email");
 
-    if(!user){
+    if (!user) {
         res.json({
             code: "error",
             message: "Token không hợp lệ"
@@ -211,8 +211,9 @@ module.exports.profile = async (req, res) => {
     })
 }
 
-module.exports.list = async (req, res) => {
+module.exports.list = async (req, res) => {    
     const listUser = await User.find({
+        _id: { $ne: req.user._id },
         deleted: false
     }).select("id fullname email");
 
