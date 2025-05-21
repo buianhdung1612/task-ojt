@@ -222,4 +222,4 @@ module.exports.list = async (req, res) => {
         message: "Thành công!",
         data: listUser
     })
-}
+} 

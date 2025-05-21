@@ -110,22 +110,6 @@ module.exports.createPost = async (req, res) => {
     const data = req.body;
     data.createdBy = req.user._id;
 
-    for (const userId of data.listUser) {
-        const existUser = await User.findOne({
-            _id: userId,
-            deleted: false
-        });
-
-        if (!existUser) {
-            res.json({
-                code: "error",
-                message: "Người dùng không hợp lệ"
-            });
-
-            return;
-        }
-    }
-
     const taskParentId = req.body.taskParentId;
     const existTaskParent = Task.findOne({
         _id: taskParentId,
@@ -167,6 +151,22 @@ module.exports.editPatch = async (req, res) => {
         });
 
         return;
+    }
+
+    for (const userId of data.listUser) {
+        const existUser = await User.findOne({
+            _id: userId,
+            deleted: false
+        });
+
+        if (!existUser) {
+            res.json({
+                code: "error",
+                message: "Người dùng không hợp lệ"
+            });
+
+            return;
+        }
     }
 
     await Task.updateOne({
