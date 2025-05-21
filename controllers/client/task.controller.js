@@ -153,19 +153,21 @@ module.exports.editPatch = async (req, res) => {
         return;
     }
 
-    for (const userId of data.listUser) {
-        const existUser = await User.findOne({
-            _id: userId,
-            deleted: false
-        });
-
-        if (!existUser) {
-            res.json({
-                code: "error",
-                message: "Người dùng không hợp lệ"
+    if (data.listUser) {
+        for (const userId of data.listUser) {
+            const existUser = await User.findOne({
+                _id: userId,
+                deleted: false
             });
 
-            return;
+            if (!existUser) {
+                res.json({
+                    code: "error",
+                    message: "Người dùng không hợp lệ"
+                });
+
+                return;
+            }
         }
     }
 
