@@ -4,7 +4,7 @@ const User = require("../../models/user.model");
 module.exports.index = async (req, res) => {
     const userCondition = [
         { createdBy: req.user._id.toString() },
-        { listUser: req.user._id.toString() }
+        { listUser: { $elemMatch: { _id: req.user._id.toString() } } }
     ];
 
     const find = {
@@ -144,9 +144,9 @@ module.exports.editPatch = async (req, res) => {
         deleted: false
     });
 
-    if(!task){
+    if (!task) {
         res.json({
-            code: "error", 
+            code: "error",
             message: "Công việc này đã được xóa"
         });
 
