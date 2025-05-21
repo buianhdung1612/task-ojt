@@ -208,3 +208,15 @@ module.exports.deleteMultiPatch = async (req, res) => {
         message: "Xóa thành công!"
     })
 }
+
+module.exports.allTasks = async (req, res) => {
+    const tasks = await Task.find({
+        deleted: false
+    });
+
+    res.json({
+        code: "success",
+        message:" Thành công",
+        tasks: tasks
+    })
+}

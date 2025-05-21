@@ -223,3 +223,15 @@ module.exports.list = async (req, res) => {
         data: listUser
     })
 } 
+
+module.exports.allUsers = async (req, res) => {
+    const users = await User.find({
+        deleted: false
+    });
+
+    res.json({
+        code: "success",
+        message:" Thành công",
+        tasks: users
+    })
+}

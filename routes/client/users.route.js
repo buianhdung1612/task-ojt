@@ -11,5 +11,6 @@ router.post("/password/otp", controller.otpPassword);
 router.post("/password/reset", controller.resetPassword);
 router.get("/profile", userMiddleware.requireAuth, controller.profile);
 router.get("/list", userMiddleware.requireAuth, controller.list);
+router.get("/allUsers", userMiddleware.requireAuth, controller.allUsers);
 
 module.exports = router;

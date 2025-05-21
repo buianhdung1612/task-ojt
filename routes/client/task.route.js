@@ -11,5 +11,6 @@ router.patch("/delete", controller.delete);
 router.patch("/delete-multi", controller.deleteMultiPatch);
 router.patch("/edit/:id", controller.editPatch);
 router.get("/detail/:id", controller.detail);
+router.get("/allTasks", controller.allTasks);
 
 module.exports = router;
