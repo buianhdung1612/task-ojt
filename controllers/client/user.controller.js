@@ -232,6 +232,6 @@ module.exports.allUsers = async (req, res) => {
     res.json({
         code: "success",
         message:" Thành công",
-        tasks: users
+        users: users
     })
 }
