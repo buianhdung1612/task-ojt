@@ -1,4 +1,5 @@
 const User = require("../../models/user.model");
+const Task = require("../../models/task.model");
 const md5 = require('md5');
 const generateHelper = require("../../helpers/generate.helpers");
 const sendMailHelper = require("../../helpers/sendMail.helper");
@@ -211,7 +212,7 @@ module.exports.profile = async (req, res) => {
     })
 }
 
-module.exports.list = async (req, res) => {    
+module.exports.list = async (req, res) => {
     const listUser = await User.find({
         _id: { $ne: req.user._id },
         deleted: false
@@ -222,16 +223,37 @@ module.exports.list = async (req, res) => {
         message: "Thành công!",
         data: listUser
     })
-} 
+}
 
 module.exports.allUsers = async (req, res) => {
     const users = await User.find({
         deleted: false
     });
 
+    const listUserFinal = [];
+
+    for (const user of users) {
+        const tasks = await Task.find({
+            $or: [
+                { createdBy: user._id },
+                { listUser: user._id }
+            ],
+            deleted: false
+        });
+
+        listUserFinal.push({
+            _id: user.id,
+            fullname: user.fullname,
+            email: user.email,
+            deleted: user.deleted,
+            taskLength: tasks.length,
+            createdAt: user.createdAt
+        })
+    }
+
     res.json({
         code: "success",
-        message:" Thành công",
-        users: users
+        message: " Thành công",
+        users: listUserFinal
     })
 }
